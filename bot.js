@@ -4,20 +4,31 @@
 // init project
 const express = require('express');
 const app = express();
+const http = require('http');
 
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
+app.get("/", (request, response) => {
+  console.log(Date.now() + " Ping Received.")
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT);
+setInterval(() => {
+  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 500000);
 
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static('public'));
+const Discord = require('discord.js');
 
-// http://expressjs.com/en/starter/basic-routing.html
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+const client = new Discord.Client();
+
+const prefix = "!";
+
+client.on('ready',() => {
+  console.log("Bot Aktif!!!");
 });
 
-// listen for requests :)
-const listener = app.listen(process.env.PORT, function() {
-  console.log('Your app is listening on port ' + listener.address().port);
+client.on('message', msg => {
+  if(msg.content.toLowerCase() === prefix + "sa"){
+    msg.channel.sendMessage("Aleyküm Selam");
+  }
 });
 
+client.login(process.env.TOKEN);
